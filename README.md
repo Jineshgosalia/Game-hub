@@ -321,6 +321,25 @@ cp .env.example .env
 
 ---
 
-## 11. License
+## 11. Netlify Deployment (GitHub Import)
+
+When deploying this project to Netlify from a GitHub repository, the configuration is already automated via `netlify.toml` and `public/_redirects`.
+
+### Netlify Build Settings
+If configuring manually in the Netlify Dashboard (**Site configuration > Build & deploy > Build settings**):
+
+- **Base directory**: `.` (leave empty or set to root)
+- **Build command**: `npm run build`
+- **Publish directory**: `dist`
+- **Node.js version**: `20` (configured in `.nvmrc` and `netlify.toml`)
+
+### Common Deployment Fixes:
+1. **404 on page refresh**: Handled by `public/_redirects` (`/* /index.html 200`) and the `[[redirects]]` block in `netlify.toml`.
+2. **Blank screen on load**: Caused when Netlify defaults to an older Node version (such as Node 16). `.nvmrc` pins the runtime to Node 20.
+3. **Asset 404s**: Handled by `base: '/'` in `vite.config.ts`.
+
+---
+
+## 12. License
 
 This project is licensed under the Apache 2.0 License. See source file headers for license details.
