@@ -1,0 +1,6 @@
+{
+  "name": "Apex Arena: Multi-Game Championship",
+  "description": "Competitive multi-game platform featuring Blitz Chess, Nitro Car Racing, and Cyber Card Duels with global leaderboards, real-time matchmaking, voice comms, and anti-cheat protection.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
