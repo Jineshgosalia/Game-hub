@@ -47,6 +47,42 @@ export interface PlayerProfile {
   inventory: string[];
 }
 
+export interface ChessReplayStep {
+  moveIndex: number;
+  color: 'w' | 'b';
+  notation: string;
+  from: [number, number];
+  to: [number, number];
+  piece: string;
+  isCheck?: boolean;
+  captured?: string;
+  commentary?: string;
+}
+
+export interface RacingReplayStep {
+  timeSec: number;
+  speedMph: number;
+  position: number;
+  lap: number;
+  event?: string;
+}
+
+export interface CardReplayStep {
+  step: number;
+  description: string;
+  playerCards: { suit: string; rank: string }[];
+  dealerCards: { suit: string; rank: string; hidden?: boolean }[];
+  playerScore: number;
+  dealerScore: number;
+}
+
+export interface ReplayData {
+  chessMoves?: ChessReplayStep[];
+  racingTelemetry?: RacingReplayStep[];
+  cardSteps?: CardReplayStep[];
+  summary: string;
+}
+
 export interface MatchHistoryItem {
   id: string;
   game: GameId;
@@ -59,6 +95,7 @@ export interface MatchHistoryItem {
   date: string;
   antiCheatScore: number; // 0 - 100%
   verified: boolean;
+  replayData?: ReplayData;
 }
 
 export interface LeaderboardEntry {

@@ -12,8 +12,8 @@ import {
 } from 'lucide-react';
 
 interface TopBarProps {
-  currentTab: 'GAMES' | 'LEADERBOARD' | 'TOURNAMENTS' | 'SHOP' | 'BATTLE_PASS' | 'PROFILE';
-  onSelectTab: (tab: 'GAMES' | 'LEADERBOARD' | 'TOURNAMENTS' | 'SHOP' | 'BATTLE_PASS' | 'PROFILE') => void;
+  currentTab: 'GAMES' | 'REPLAYS' | 'LEADERBOARD' | 'TOURNAMENTS' | 'SHOP' | 'BATTLE_PASS' | 'PROFILE';
+  onSelectTab: (tab: 'GAMES' | 'REPLAYS' | 'LEADERBOARD' | 'TOURNAMENTS' | 'SHOP' | 'BATTLE_PASS' | 'PROFILE') => void;
   playerProfile: PlayerProfile;
   currentLanguage: LanguageCode;
   onOpenMatchmaking: () => void;
@@ -39,7 +39,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   const t = TRANSLATIONS[currentLanguage];
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#080b11]/90 backdrop-blur-md border-b border-slate-800">
+    <header className="sticky top-0 z-40 w-full bg-[#080b11]/85 backdrop-blur-xl border-b border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Zone 1: Single text element brand wordmark */}
         <button
@@ -67,6 +67,19 @@ export const TopBar: React.FC<TopBarProps> = ({
             }`}
           >
             {t.play}
+          </button>
+          <button
+            onClick={() => {
+              sounds.playClick();
+              onSelectTab('REPLAYS');
+            }}
+            className={`whitespace-nowrap transition-colors ${
+              currentTab === 'REPLAYS'
+                ? 'text-cyan-400 font-semibold'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            {t.replays || 'Replays'}
           </button>
           <button
             onClick={() => {

@@ -20,6 +20,7 @@ interface ProfileViewProps {
   matchHistory: MatchHistoryItem[];
   onUpdateProfile: (updated: Partial<PlayerProfile>) => void;
   onOpenShareCard: () => void;
+  onWatchReplay?: (matchId: string) => void;
 }
 
 export const ProfileView: React.FC<ProfileViewProps> = ({
@@ -27,6 +28,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   matchHistory,
   onUpdateProfile,
   onOpenShareCard,
+  onWatchReplay,
 }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [username, setUsername] = useState<string>(profile.username);
@@ -369,6 +371,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                 <th className="py-3 px-4 text-right">Duration</th>
                 <th className="py-3 px-4 text-right">Date</th>
                 <th className="py-3 px-4 text-center">Integrity Shield</th>
+                <th className="py-3 px-4 text-center">Replay</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 text-xs">
@@ -411,6 +414,18 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                       <CheckCircle className="w-3.5 h-3.5" />
                       100%
                     </span>
+                  </td>
+                  <td className="py-3 px-4 text-center">
+                    {onWatchReplay ? (
+                      <button
+                        onClick={() => onWatchReplay(m.id)}
+                        className="px-2.5 py-1 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 text-[11px] font-semibold transition-colors"
+                      >
+                        Watch
+                      </button>
+                    ) : (
+                      <span className="text-slate-600">—</span>
+                    )}
                   </td>
                 </tr>
               ))}

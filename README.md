@@ -161,6 +161,8 @@ The codebase is organized into modular directories following clean architecture 
     └── components/
         ├── navigation/
         │   └── TopBar.tsx               # Header strictly following the 3-zone Top Bar Contract
+        ├── replays/
+        │   └── ReplaysView.tsx          # Match replay theater with step-by-step playback controls
         ├── games/
         │   ├── GameHub.tsx              # Main arena game selector and router
         │   ├── chess/
@@ -297,6 +299,7 @@ The output in `/dist` can be deployed instantly to any static hosting provider o
 - **Daily Quests & Streak Calendar**: 7-day progressive retention rewards calendar with Coins, Gems, and exclusive skins.
 - **Seasonal Battle Pass**: 8-tier *Season 1: Neon Genesis* progression ladder with Free and Premium reward paths.
 - **Cross-Platform Cloud Sync**: LocalStorage persistence with SHA-256 cloud sync digest hash, JSON export/import backups, and 2FA authenticator with live 6-digit TOTP tokens.
+- **Match Replay Theater**: Step-by-step interactive playback with Framer Motion transitions across moves, telemetry, and cards.
 - **Social Media Share Card**: Generates exportable competitor cards with one-click sharing to X (Twitter).
 
 ---

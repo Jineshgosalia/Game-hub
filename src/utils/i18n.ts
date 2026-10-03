@@ -4,6 +4,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   en: {
     arena_title: 'Apex Arena',
     play: 'Play',
+    replays: 'Replays',
     leaderboards: 'Leaderboards',
     tournaments: 'Tournaments',
     shop: 'Cosmetics Shop',
@@ -37,6 +38,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   es: {
     arena_title: 'Apex Arena',
     play: 'Jugar',
+    replays: 'Repeticiones',
     leaderboards: 'Clasificaciones',
     tournaments: 'Torneos',
     shop: 'Tienda Cosméticos',
@@ -70,6 +72,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   fr: {
     arena_title: 'Apex Arena',
     play: 'Jouer',
+    replays: 'Replays',
     leaderboards: 'Classements',
     tournaments: 'Tournois',
     shop: 'Boutique Cosmétique',
@@ -103,6 +106,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   de: {
     arena_title: 'Apex Arena',
     play: 'Spielen',
+    replays: 'Replays',
     leaderboards: 'Ranglisten',
     tournaments: 'Turniere',
     shop: 'Kosmetik-Shop',
@@ -136,6 +140,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   ja: {
     arena_title: 'Apex Arena',
     play: 'プレイ',
+    replays: 'リプレイ',
     leaderboards: 'ランキング',
     tournaments: 'トーナメント',
     shop: 'ショップ',
@@ -169,6 +174,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   pt: {
     arena_title: 'Apex Arena',
     play: 'Jogar',
+    replays: 'Repetições',
     leaderboards: 'Placares',
     tournaments: 'Torneios',
     shop: 'Loja Cosmética',
@@ -202,6 +208,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   zh: {
     arena_title: 'Apex Arena',
     play: '开始游戏',
+    replays: '比赛回放',
     leaderboards: '全球排行榜',
     tournaments: '巅峰锦标赛',
     shop: '外观商城',

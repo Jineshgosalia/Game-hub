@@ -33,6 +33,7 @@ import { sounds } from './utils/soundEffects';
 // Top Bar & Views
 import { TopBar } from './components/navigation/TopBar';
 import { GameHub } from './components/games/GameHub';
+import { ReplaysView } from './components/replays/ReplaysView';
 import { LeaderboardView } from './components/leaderboard/LeaderboardView';
 import { TournamentsView } from './components/tournaments/TournamentsView';
 import { ShopView } from './components/shop/ShopView';
@@ -61,9 +62,10 @@ export default function App() {
 
   // Active navigation & Game state
   const [currentTab, setCurrentTab] = useState<
-    'GAMES' | 'LEADERBOARD' | 'TOURNAMENTS' | 'SHOP' | 'BATTLE_PASS' | 'PROFILE'
+    'GAMES' | 'REPLAYS' | 'LEADERBOARD' | 'TOURNAMENTS' | 'SHOP' | 'BATTLE_PASS' | 'PROFILE'
   >('GAMES');
   const [activeGame, setActiveGame] = useState<GameId | null>(null);
+  const [selectedReplayMatchId, setSelectedReplayMatchId] = useState<string | undefined>(undefined);
   const [onlineOpponent, setOnlineOpponent] = useState<{
     name: string;
     avatar: string;
@@ -140,7 +142,7 @@ export default function App() {
       };
     });
 
-    // Record in Match History
+    // Record in Match History with rich replay data
     const historyItem: MatchHistoryItem = {
       id: 'match_' + Date.now(),
       game,
@@ -153,6 +155,63 @@ export default function App() {
       date: 'Just now',
       antiCheatScore: 100,
       verified: true,
+      replayData: {
+        summary: `Competitive ${game === 'CHESS' ? 'Blitz Chess' : game === 'CAR_RACING' ? 'Nitro Racing' : 'Cyber 21'} ranked matchup resulting in a decisive ${result}.`,
+        chessMoves: game === 'CHESS' ? [
+          { moveIndex: 1, color: 'w', notation: 'e4', from: [6, 4], to: [4, 4], piece: 'p', commentary: 'Controlled center opening' },
+          { moveIndex: 2, color: 'b', notation: 'c5', from: [1, 2], to: [3, 2], piece: 'p', commentary: 'Sicilian Defense counter-strike' },
+          { moveIndex: 3, color: 'w', notation: 'Nf3', from: [7, 6], to: [5, 5], piece: 'n', commentary: 'Open Sicilian preparation' },
+          { moveIndex: 4, color: 'b', notation: 'd6', from: [1, 3], to: [2, 3], piece: 'p', commentary: 'Solid pawn structure' },
+          { moveIndex: 5, color: 'w', notation: 'd4', from: [6, 3], to: [4, 3], piece: 'p', commentary: 'Center break initiated' },
+          { moveIndex: 6, color: 'b', notation: 'cxd4', from: [3, 2], to: [4, 3], piece: 'p', captured: 'p', commentary: 'Flank pawn exchanged for center pawn' },
+          { moveIndex: 7, color: 'w', notation: 'Nxd4', from: [5, 5], to: [4, 3], piece: 'n', captured: 'p', commentary: 'Knight dominates center' },
+          { moveIndex: 8, color: 'b', notation: 'Nf6', from: [0, 6], to: [2, 5], piece: 'n', commentary: 'Black attacks e4 pawn' },
+          { moveIndex: 9, color: 'w', notation: 'Nc3', from: [7, 1], to: [5, 2], piece: 'n', commentary: 'Defending e4 and developing' },
+          { moveIndex: 10, color: 'b', notation: 'a6', from: [1, 0], to: [2, 0], piece: 'p', commentary: 'Najdorf variation setup' },
+          { moveIndex: 11, color: 'w', notation: 'Be3', from: [7, 2], to: [5, 4], piece: 'b', commentary: 'English Attack development' },
+          { moveIndex: 12, color: 'b', notation: 'e5', from: [1, 4], to: [3, 4], piece: 'p', commentary: 'Challenging white centralized knight' },
+          { moveIndex: 13, color: 'w', notation: 'Nf5', from: [4, 3], to: [3, 5], piece: 'n', commentary: 'Aggressive outpost on f5' },
+          { moveIndex: 14, color: 'b', notation: 'Bxf5', from: [0, 2], to: [3, 5], piece: 'b', captured: 'n', commentary: 'Bishop eliminates dangerous knight' },
+          { moveIndex: 15, color: 'w', notation: 'exf5', from: [4, 4], to: [3, 5], piece: 'p', captured: 'b', commentary: 'White maintains attacking pressure' },
+          { moveIndex: 16, color: 'b', notation: 'd5', from: [2, 3], to: [3, 3], piece: 'p', commentary: 'Counter-attack in center' },
+          { moveIndex: 17, color: 'w', notation: 'Bg5', from: [5, 4], to: [3, 6], piece: 'b', commentary: 'Pinning knight to queen' },
+          { moveIndex: 18, color: 'b', notation: 'd4', from: [3, 3], to: [4, 3], piece: 'p', commentary: 'Pawn fork attempt' },
+          { moveIndex: 19, color: 'w', notation: 'Ne4', from: [5, 2], to: [4, 4], piece: 'n', commentary: 'Tactical repositioning' },
+          { moveIndex: 20, color: 'b', notation: 'Be7', from: [0, 5], to: [1, 4], piece: 'b', commentary: 'Unpinning knight' },
+          { moveIndex: 21, color: 'w', notation: 'Bxf6', from: [3, 6], to: [2, 5], piece: 'b', captured: 'n', commentary: 'Defenders removed' },
+          { moveIndex: 22, color: 'b', notation: 'Bxf6', from: [1, 4], to: [2, 5], piece: 'b', captured: 'b', commentary: 'Recaptured' },
+          { moveIndex: 23, color: 'w', notation: 'Bc4', from: [7, 5], to: [4, 2], piece: 'b', commentary: 'Targeting weak d5 outpost' },
+          { moveIndex: 24, color: 'b', notation: 'O-O', from: [0, 4], to: [0, 6], piece: 'k', commentary: 'King tucked to safety' },
+          { moveIndex: 25, color: 'w', notation: 'Qh5#', from: [7, 3], to: [3, 7], piece: 'q', isCheck: true, commentary: 'Decisive queen battery mate!' },
+        ] : undefined,
+        racingTelemetry: game === 'CAR_RACING' ? [
+          { timeSec: 0, speedMph: 0, position: 4, lap: 1, event: 'Race Started' },
+          { timeSec: 15, speedMph: 150, position: 3, lap: 1, event: 'Hairpin turn drift cleanly negotiated' },
+          { timeSec: 32, speedMph: 190, position: 2, lap: 1, event: 'Nitro boost applied on straightaway' },
+          { timeSec: 50, speedMph: 175, position: 2, lap: 2, event: 'Lap 1 split: 00:50.1' },
+          { timeSec: 78, speedMph: 220, position: 1, lap: 2, event: 'Slingshot boost taken for P1 lead' },
+          { timeSec: 110, speedMph: 215, position: 1, lap: 3, event: 'Final lap defense maintained' },
+          { timeSec: 122, speedMph: 230, position: 1, lap: 3, event: 'Checkered flag crossed!' },
+        ] : undefined,
+        cardSteps: game === 'CARD_GAME' ? [
+          {
+            step: 1,
+            description: 'Dealt Ace of Spades and 10 of Diamonds (Natural 21!)',
+            playerCards: [{ suit: '♠', rank: 'A' }, { suit: '♦', rank: '10' }],
+            dealerCards: [{ suit: '♥', rank: '8' }, { suit: '♣', rank: '9', hidden: true }],
+            playerScore: 21,
+            dealerScore: 8,
+          },
+          {
+            step: 2,
+            description: 'Dealer reveals 9 of Clubs for 17 total. Natural Blackjack victory payout!',
+            playerCards: [{ suit: '♠', rank: 'A' }, { suit: '♦', rank: '10' }],
+            dealerCards: [{ suit: '♥', rank: '8' }, { suit: '♣', rank: '9' }],
+            playerScore: 21,
+            dealerScore: 17,
+          },
+        ] : undefined,
+      },
     };
     setMatchHistory(prev => [historyItem, ...prev.slice(0, 19)]);
 
@@ -287,17 +346,23 @@ export default function App() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col transition-colors duration-200 ${
+      className={`min-h-screen flex flex-col relative transition-colors duration-200 bg-arena-grid ${
         theme === 'oled'
           ? 'bg-black text-slate-100'
           : theme === 'cyber'
-          ? 'bg-[#080d1a] text-slate-100'
+          ? 'bg-[#060913] text-slate-100'
           : 'bg-[#080b11] text-slate-100'
       }`}
     >
+      {/* Ambient Top Lighting Vignette */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(6,182,212,0.12),transparent_70%)] z-0"
+        aria-hidden="true"
+      />
+
       {/* Offline Travel Mode Alert Banner */}
       {profile.isOfflineMode && (
-        <div className="bg-amber-600/90 text-slate-950 font-bold text-xs py-1.5 px-4 text-center">
+        <div className="relative z-50 bg-amber-600/90 text-slate-950 font-bold text-xs py-1.5 px-4 text-center">
           ✈ Offline Travel Mode Active — Local AI bots enabled without internet connectivity.
         </div>
       )}
@@ -330,6 +395,14 @@ export default function App() {
             onOpenMatchmakingForGame={handleStartMatchmakingForGame}
             onMatchComplete={handleMatchComplete}
             onlineOpponent={onlineOpponent}
+          />
+        )}
+
+        {currentTab === 'REPLAYS' && (
+          <ReplaysView
+            matchHistory={matchHistory}
+            selectedMatchId={selectedReplayMatchId}
+            onSelectMatch={id => setSelectedReplayMatchId(id)}
           />
         )}
 
@@ -374,6 +447,10 @@ export default function App() {
             matchHistory={matchHistory}
             onUpdateProfile={updated => setProfile(p => ({ ...p, ...updated }))}
             onOpenShareCard={() => setShowShareCard(true)}
+            onWatchReplay={matchId => {
+              setSelectedReplayMatchId(matchId);
+              setCurrentTab('REPLAYS');
+            }}
           />
         )}
       </main>
