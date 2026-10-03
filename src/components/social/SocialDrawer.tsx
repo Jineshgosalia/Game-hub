@@ -20,6 +20,7 @@ interface SocialDrawerProps {
   playerProfile: PlayerProfile;
   onChallengeFriend: (friend: Friend) => void;
   onAddFriend: (name: string, tag: string) => void;
+  onOpenSquadTraining?: (initialFriend?: Friend) => void;
 }
 
 export const SocialDrawer: React.FC<SocialDrawerProps> = ({
@@ -29,6 +30,7 @@ export const SocialDrawer: React.FC<SocialDrawerProps> = ({
   playerProfile,
   onChallengeFriend,
   onAddFriend,
+  onOpenSquadTraining,
 }) => {
   const [activeTab, setActiveTab] = useState<'FRIENDS' | 'CHAT'>('FRIENDS');
   const [chatChannel, setChatChannel] = useState<'GLOBAL' | 'SQUAD' | 'MATCH'>('GLOBAL');
@@ -169,13 +171,24 @@ export const SocialDrawer: React.FC<SocialDrawerProps> = ({
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Community Circle
             </span>
-            <button
-              onClick={() => setShowAddModal(!showAddModal)}
-              className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1"
-            >
-              <UserPlus className="w-3.5 h-3.5" />
-              Add Friend
-            </button>
+            <div className="flex items-center gap-2">
+              {onOpenSquadTraining && (
+                <button
+                  onClick={() => onOpenSquadTraining()}
+                  className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1"
+                >
+                  <Users className="w-3.5 h-3.5" />
+                  Squad Lab
+                </button>
+              )}
+              <button
+                onClick={() => setShowAddModal(!showAddModal)}
+                className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1"
+              >
+                <UserPlus className="w-3.5 h-3.5" />
+                Add Friend
+              </button>
+            </div>
           </div>
 
           {showAddModal && (
@@ -237,6 +250,15 @@ export const SocialDrawer: React.FC<SocialDrawerProps> = ({
                   </div>
 
                   <div className="flex items-center gap-1.5">
+                    {isOnline && onOpenSquadTraining && (
+                      <button
+                        onClick={() => onOpenSquadTraining(friend)}
+                        className="p-2 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 transition-colors"
+                        title="Invite to Squad Practice (Zero ELO)"
+                      >
+                        <Users className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                     {isOnline && (
                       <button
                         onClick={() => onChallengeFriend(friend)}

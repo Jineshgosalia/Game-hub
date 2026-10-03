@@ -42,6 +42,7 @@ import { ProfileView } from './components/profile/ProfileView';
 
 // Modals & Drawers
 import { MatchmakingModal } from './components/multiplayer/MatchmakingModal';
+import { SquadTrainingModal } from './components/training/SquadTrainingModal';
 import { VoiceChatHub } from './components/social/VoiceChatHub';
 import { SocialDrawer } from './components/social/SocialDrawer';
 import { AntiCheatModal } from './components/anticheat/AntiCheatModal';
@@ -65,6 +66,7 @@ export default function App() {
     'GAMES' | 'REPLAYS' | 'LEADERBOARD' | 'TOURNAMENTS' | 'SHOP' | 'BATTLE_PASS' | 'PROFILE'
   >('GAMES');
   const [activeGame, setActiveGame] = useState<GameId | null>(null);
+  const [isTrainingMode, setIsTrainingMode] = useState<boolean>(false);
   const [selectedReplayMatchId, setSelectedReplayMatchId] = useState<string | undefined>(undefined);
   const [onlineOpponent, setOnlineOpponent] = useState<{
     name: string;
@@ -75,6 +77,7 @@ export default function App() {
 
   // Modals visibility
   const [showMatchmaking, setShowMatchmaking] = useState<boolean>(false);
+  const [showSquadTraining, setShowSquadTraining] = useState<boolean>(false);
   const [matchmakingInitialGame, setMatchmakingInitialGame] = useState<GameId>('CHESS');
   const [showVoiceChat, setShowVoiceChat] = useState<boolean>(false);
   const [showSocial, setShowSocial] = useState<boolean>(false);
@@ -107,6 +110,30 @@ export default function App() {
     eloDelta: number,
     coinsEarned: number
   ) => {
+    // Zero-ELO Squad Training Mode safeguard
+    if (isTrainingMode) {
+      const historyItem: MatchHistoryItem = {
+        id: 'match_training_' + Date.now(),
+        game,
+        opponentName: onlineOpponent?.name || 'Squad Sparring Partner',
+        opponentAvatar: onlineOpponent?.avatar || '⚡',
+        opponentRating: onlineOpponent?.rating || 1650,
+        result,
+        ratingDelta: 0, // Zero ELO change!
+        duration: game === 'CHESS' ? '04:10' : game === 'CAR_RACING' ? '01:15' : '02:00',
+        date: 'Squad Training Session',
+        antiCheatScore: 100,
+        verified: true,
+        replayData: {
+          summary: `Squad Training Sparring session in ${game === 'CHESS' ? 'Blitz Chess' : game === 'CAR_RACING' ? 'Nitro Racing' : 'Cyber 21'} (100% Zero-ELO Rating Protected).`,
+        },
+      };
+      setMatchHistory(prev => [historyItem, ...prev.slice(0, 19)]);
+      setIsTrainingMode(false);
+      sounds.playSuccess();
+      return;
+    }
+
     setProfile(prev => {
       const isWin = result === 'VICTORY';
       const key = game === 'CHESS' ? 'chess' : game === 'CAR_RACING' ? 'racing' : 'cards';
@@ -238,9 +265,32 @@ export default function App() {
     game: GameId,
     opp: { name: string; avatar: string; rating: number; title: string }
   ) => {
+    setIsTrainingMode(false);
     setOnlineOpponent(opp);
     setActiveGame(game);
     setCurrentTab('GAMES');
+  };
+
+  const handleLaunchSquadTraining = (game: GameId, partner?: Friend) => {
+    setIsTrainingMode(true);
+    setOnlineOpponent(
+      partner
+        ? {
+            name: partner.name,
+            avatar: partner.avatar,
+            rating: partner.rating,
+            title: 'Squad Sparring Partner',
+          }
+        : {
+            name: 'Squad Coach AI',
+            avatar: '🎓',
+            rating: 1600,
+            title: 'Sparring Bot',
+          }
+    );
+    setActiveGame(game);
+    setCurrentTab('GAMES');
+    sounds.playSuccess();
   };
 
   const handleChallengeCompetitor = (competitor: LeaderboardEntry | Friend) => {
@@ -367,6 +417,27 @@ export default function App() {
         </div>
       )}
 
+      {/* Squad Training Mode Zero-ELO Banner */}
+      {isTrainingMode && activeGame && (
+        <div className="relative z-40 bg-gradient-to-r from-indigo-950 via-cyan-950 to-indigo-950 border-b border-cyan-500/40 text-cyan-300 font-semibold text-xs py-2 px-4 flex items-center justify-between shadow-lg">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+            <span>
+              <strong>⚡ Squad Training Session Active:</strong> Zero ELO rating impact. Practice moves, ghost laps, and card strategies with your squad risk-free.
+            </span>
+          </div>
+          <button
+            onClick={() => {
+              setIsTrainingMode(false);
+              setActiveGame(null);
+            }}
+            className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold text-[11px] border border-slate-700 transition-colors"
+          >
+            Exit Training
+          </button>
+        </div>
+      )}
+
       {/* Top Bar Navigation (Strict 3-zone Top Bar Contract) */}
       <TopBar
         currentTab={currentTab}
@@ -395,6 +466,7 @@ export default function App() {
             onOpenMatchmakingForGame={handleStartMatchmakingForGame}
             onMatchComplete={handleMatchComplete}
             onlineOpponent={onlineOpponent}
+            onOpenSquadTraining={() => setShowSquadTraining(true)}
           />
         )}
 
@@ -464,6 +536,14 @@ export default function App() {
         onStartMatch={handleStartMatchFound}
       />
 
+      <SquadTrainingModal
+        isOpen={showSquadTraining}
+        onClose={() => setShowSquadTraining(false)}
+        playerProfile={profile}
+        friends={friends}
+        onLaunchTraining={handleLaunchSquadTraining}
+      />
+
       <VoiceChatHub
         playerProfile={profile}
         isOpen={showVoiceChat}
@@ -477,6 +557,10 @@ export default function App() {
         playerProfile={profile}
         onChallengeFriend={handleChallengeCompetitor}
         onAddFriend={handleAddFriend}
+        onOpenSquadTraining={friend => {
+          setShowSocial(false);
+          setShowSquadTraining(true);
+        }}
       />
 
       <AntiCheatModal

@@ -299,8 +299,10 @@ The output in `/dist` can be deployed instantly to any static hosting provider o
 - **Daily Quests & Streak Calendar**: 7-day progressive retention rewards calendar with Coins, Gems, and exclusive skins.
 - **Seasonal Battle Pass**: 8-tier *Season 1: Neon Genesis* progression ladder with Free and Premium reward paths.
 - **Cross-Platform Cloud Sync**: LocalStorage persistence with SHA-256 cloud sync digest hash, JSON export/import backups, and 2FA authenticator with live 6-digit TOTP tokens.
+- **Squad Training & Sparring Lab**: Zero-ELO protected multiplayer scrims with friends from the social drawer, featuring free opening experiments, ghost racing laps, and real-time voice chat.
 - **Match Replay Theater**: Step-by-step interactive playback with Framer Motion transitions across moves, telemetry, and cards.
 - **Social Media Share Card**: Generates exportable competitor cards with one-click sharing to X (Twitter).
+- **Interface Design System Specification**: Persistent `.interface-design/system.md` enforcing exact button heights (`h-8`, `h-10`, `h-12`), corner radius scales (`12px`, `16px`, `24px`), 60-30-10 color budget, and anti-slop rules.
 
 ---
 

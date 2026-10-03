@@ -196,3 +196,27 @@ export interface NotificationItem {
 
 export type LanguageCode = 'en' | 'es' | 'fr' | 'de' | 'ja' | 'pt' | 'zh';
 export type ThemeMode = 'dark' | 'cyber' | 'oled' | 'light';
+
+export interface SquadMember {
+  id: string;
+  name: string;
+  avatar: string;
+  tag: string;
+  rating: number;
+  role: 'Tactician' | 'Driver' | 'Duelist' | 'Coach';
+  isReady: boolean;
+  isHost: boolean;
+  isMuted: boolean;
+  pingMs: number;
+}
+
+export interface SquadTrainingSession {
+  id: string;
+  roomCode: string;
+  game: GameId;
+  modeName: string;
+  members: SquadMember[];
+  voiceActive: boolean;
+  isZeroElo: true;
+}
+

@@ -26,6 +26,7 @@ interface GameHubProps {
   onOpenMatchmakingForGame: (game: GameId) => void;
   onMatchComplete: (game: GameId, result: 'VICTORY' | 'DEFEAT' | 'DRAW', eloDelta: number, coinsEarned: number) => void;
   onlineOpponent?: { name: string; avatar: string; rating: number; title: string } | null;
+  onOpenSquadTraining?: () => void;
 }
 
 export const GameHub: React.FC<GameHubProps> = ({
@@ -36,6 +37,7 @@ export const GameHub: React.FC<GameHubProps> = ({
   onOpenMatchmakingForGame,
   onMatchComplete,
   onlineOpponent,
+  onOpenSquadTraining,
 }) => {
   const t = TRANSLATIONS[currentLanguage];
 
@@ -185,6 +187,18 @@ export const GameHub: React.FC<GameHubProps> = ({
               <Bot className="w-4 h-4" />
               Play vs AI Bot
             </button>
+            {onOpenSquadTraining && (
+              <button
+                onClick={() => {
+                  sounds.playClick();
+                  onOpenSquadTraining();
+                }}
+                className="px-6 py-3.5 rounded-2xl bg-indigo-950 hover:bg-indigo-900/80 text-indigo-300 font-semibold text-sm border border-indigo-500/40 transition-colors flex items-center gap-2 shadow-lg shadow-indigo-500/10"
+              >
+                <Users className="w-4 h-4 text-indigo-400" />
+                Squad Training Lab
+              </button>
+            )}
           </div>
         </div>
 

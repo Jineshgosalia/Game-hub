@@ -84,6 +84,31 @@ class SoundEngine {
     osc.stop(now + 0.35);
   }
 
+  public playSuccess() {
+    if (this.isMuted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(440, now); // A4
+    osc.frequency.setValueAtTime(554.37, now + 0.08); // C#5
+    osc.frequency.setValueAtTime(659.25, now + 0.16); // E5
+    osc.frequency.setValueAtTime(880, now + 0.24); // A5
+
+    gain.gain.setValueAtTime(0.18 * this.volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.45);
+  }
+
   // --- Chess Sound Effects ---
   public playChessMove() {
     if (this.isMuted) return;
